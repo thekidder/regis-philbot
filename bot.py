@@ -68,7 +68,7 @@ def main():
 class Trivia():
 	askedQuestions = set()
 	currentQuestion = 0
-	questionSet = config["questionSet"]
+	questionSet = ''
 	timer = time.time()
 	hintGiven = False
 	quietCount = 0
@@ -85,6 +85,7 @@ class Trivia():
 	
 		loadConfig()
 		loadQuestions()
+		self.questionSet = config["questionSet"]
 		self.currentQuestion = random.randint(0, len(questions[self.questionSet]) - 1)
 		self.getNextQuestion()
 	
@@ -219,7 +220,7 @@ def loadConfig():
 	for index in lines.split("\n"):
 		split = index.partition("=")
 		
-		if len(split) == 3:		
+		if len(split) == 3:
 			config[split[0]] = split[2]
 
 # Load the questions from a file storing into global dict
