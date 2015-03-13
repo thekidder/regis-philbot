@@ -20,7 +20,7 @@ def main():
       if len(parsed) < 2:
         continue
       var = parsed[0].strip()
-      val = parsed[1].strip().decode('utf8', 'ignore')
+      val = ': '.join(parsed[1:]).strip().decode('utf8', 'ignore')
       if var == 'Category':
         category = val
       elif var == 'Question':
