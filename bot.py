@@ -17,7 +17,7 @@ import random
 import urlparse
 import requests
 import BaseHTTPServer
-import simplejson as json
+import json
 
 expectedRequestKeys = ['user_id','channel_name','timestamp','team_id','channel_id','token','text','service_id','team_domain','user_name']
 
@@ -230,7 +230,7 @@ def loadQuestions():
 	file = open("questions/" + config["questions"], "r")
 	
 	global questions
-	questions = json.load(file)
+	questions = json.load(file, encoding='utf-8')
 	
 	file.close()
 
