@@ -73,7 +73,6 @@ class Trivia():
 	timer = time.time()
 	hintGiven = False
 	quietCount = 0
-	money = {}
 	
 	def __init__(self):
 		global httpd
@@ -86,9 +85,24 @@ class Trivia():
 	
 		loadConfig()
 		loadQuestions()
+		self.load()
 		self.questionSet = config["questionSet"]
 		self.currentQuestion = random.randint(0, len(questions[self.questionSet]) - 1)
 		self.getNextQuestion()
+
+	def load(self):
+		try:
+			with open('scores.json', 'r') as f:
+				self.money = json.loads(f.read())
+			prettyPrint('loaded scores')
+		except IOError:
+			prettyPrint('no scores to load')
+			self.money = {}
+
+	def save(self):
+		score = json.dumps(self.money)
+		with open('scores.json', 'w') as f:
+			f.write(score)
 	
 	def startTimer(self):
 			self.timer = time.time()
@@ -275,4 +289,5 @@ if __name__ == '__main__':
 	except KeyboardInterrupt:
 		sendMessage(config["botname"] + " shutting down...")
 		prettyPrint("Shutting down")
+		bot.save()
 		sys.exit(1)
