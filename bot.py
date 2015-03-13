@@ -13,6 +13,7 @@
 import sys
 import time
 import math
+import re
 import random
 import urlparse
 import requests
@@ -118,14 +119,14 @@ class Trivia():
 		
 	def checkAnswer(self, msg):
 		answer = questions[self.questionSet][self.currentQuestion]["answer"]
+		regexp = questions[self.questionSet][self.currentQuestion]["regexp"]
 		first_hash = answer.find('#')
 		last_hash = answer.rfind('#')
 
 		if first_hash != -1 and last_hash != -1 and first_hash != last_hash:
 			answer = answer[first_hash+1:last_hash]
-			print 'changing answer to {}'.format(answer)
 		
-		if msg.lower().find(answer.lower()) != -1:
+		if msg.lower().find(answer.lower()) != -1 or (regexp and re.search(regexp, msg.lower(), flags=re.IGNORECASE) is not None):
 			return True
 		else:
 			return False

@@ -13,6 +13,7 @@ def main():
     question = None
     category = None
     answer = None
+    regexp = None
     for line in input_file:
       if line[0] == '#':
         continue
@@ -27,15 +28,19 @@ def main():
         question = val
       elif var == 'Answer':
         answer = val
+      elif var == 'Regexp':
+        regexp = val
       if question and answer and category:
         output['trivia'].append({
           'question': question,
           'answer': answer,
-          'category': category  
+          'category': category,
+          'regexp': regexp
         })
         question = None
         answer = None
         category = None
+        regexp = None
   with open(output_filename, 'w') as output_file:
     output_file.write(json.dumps(output, ensure_ascii=False, encoding='utf8'))
 
