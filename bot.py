@@ -67,7 +67,7 @@ def main():
 		
 class Trivia():
 	askedQuestions = set()
-	currentQuestion = random.randint(0, len(questions[self.questionSet]) - 1)
+	currentQuestion = 0
 	questionSet = config["questionSet"]
 	timer = time.time()
 	hintGiven = False
@@ -85,6 +85,7 @@ class Trivia():
 	
 		loadConfig()
 		loadQuestions()
+		self.currentQuestion = random.randint(0, len(questions[self.questionSet]) - 1)
 		self.getNextQuestion()
 	
 	def startTimer(self):
