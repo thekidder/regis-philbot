@@ -66,18 +66,22 @@ def main():
 		bot.delay(random.randint(15,30))	
 		
 class Trivia():
-	currentQuestion = 0
-	questionSet = "security"
+	askedQuestions = set()
+	currentQuestion = random.randint(0, len(questions[self.questionSet]) - 1)
+	questionSet = config["questionSet"]
 	timer = time.time()
 	hintGiven = False
 	quietCount = 0
+	money = {}
 	
 	def __init__(self):
 		global httpd
 		httpd = BaseHTTPServer.HTTPServer(('', 69), RequestHandler)
 		httpd.socket.settimeout(1)
 
-		prettyPrint("Starting Regis Philbot v1.0")	
+		random.seed()
+
+		prettyPrint("Starting Regis Philbot")
 	
 		loadConfig()
 		loadQuestions()
@@ -99,6 +103,7 @@ class Trivia():
 		answerFound = False
 		self.hintGiven = False
 		
+		self.askedQuestions.add(self.currentQuestion)
 		question = questions[self.questionSet][self.currentQuestion]["question"]
 		answer = questions[self.questionSet][self.currentQuestion]["answer"]
 
@@ -118,15 +123,18 @@ class Trivia():
 			return False
 
 	def getNextQuestion(self):
-		random.seed()		
-		
-		self.currentQuestion = random.randint(0, len(questions[self.questionSet])) 		
+		while self.currentQuestion in self.askedQuestions:
+			self.currentQuestion = random.randint(0, len(questions[self.questionSet]) - 1)
 
 	def givePoints(self, userid, username):
 		self.getNextQuestion()
+
+		if userid not in self.money:
+			self.money[userid] = 0
+		self.money[userid] += 10
 		prettyPrint("Correct answer given by: " + username, 1)	
 		sendMessage("Correct! " + username + ", you earned $10!")
-		sendMessage("Your riches have amassed to a staggering $30!")
+		sendMessage("Your riches have amassed to a staggering ${}!".format(self.money[userid]))
 	
 	def giveAnswer(self):
 		answer = questions[self.questionSet][self.currentQuestion]["answer"]
