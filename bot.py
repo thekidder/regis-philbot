@@ -259,9 +259,6 @@ def sendMessage(msg):
 
 	if not(str(response) == "<Response [200]>"):
 		prettyPrint(color.red + "ERROR: " + color.reset + "Send message failed.")
-		
-		global running
-		running = False	
 			
 # Startup function	
 if __name__ == '__main__':
