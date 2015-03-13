@@ -123,8 +123,9 @@ class Trivia():
 
 		if first_hash != -1 and last_hash != -1 and first_hash != last_hash:
 			answer = answer[first_hash:last_hash]
+			print 'changing answer to {}'.format(answer)
 		
-		if	( msg.lower() == answer.lower() ):
+		if msg.lower().find(answer.lower()) != -1:
 			return True
 		else:
 			return False
