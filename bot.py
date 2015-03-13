@@ -118,6 +118,11 @@ class Trivia():
 		
 	def checkAnswer(self, msg):
 		answer = questions[self.questionSet][self.currentQuestion]["answer"]
+		first_hash = answer.find('#')
+		last_hash = answer.rfind('#')
+
+		if first_hash != -1 and last_hash != -1 and first_hash != last_hash:
+			answer = answer[first_hash:last_hash]
 		
 		if	( msg.lower() == answer.lower() ):
 			return True
@@ -145,7 +150,7 @@ class Trivia():
 			
 		if not(answer == None):		
 			prettyPrint("Answer was: " + answer, 1)
-			sendMessage("Times up! The answer was: " + answer)
+			sendMessage("Times up! The answer was: " + answer.replace('#', ''))
 	
 		self.getNextQuestion()		
 	
