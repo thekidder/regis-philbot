@@ -254,7 +254,7 @@ def prettyPrint(msg, tabLevel=0):
 	file.close()
 
 def sendMessage(msg):
-	response = requests.post(config["incomingHookURL"], data='{"channel": "#general", "username": "' + config["botname"] + '", "text":"' + msg + '"}')
+	response = requests.post(config["incomingHookURL"], data='{"channel": ' + config['channel'] + ', "username": "' + config["botname"] + '", "text":"' + msg + '"}')
 
 	if not(str(response) == "<Response [200]>"):
 		prettyPrint(color.red + "ERROR: " + color.reset + "Send message failed.")
