@@ -122,7 +122,7 @@ class Trivia():
 		last_hash = answer.rfind('#')
 
 		if first_hash != -1 and last_hash != -1 and first_hash != last_hash:
-			answer = answer[first_hash:last_hash]
+			answer = answer[first_hash+1:last_hash-1]
 			print 'changing answer to {}'.format(answer)
 		
 		if msg.lower().find(answer.lower()) != -1:
