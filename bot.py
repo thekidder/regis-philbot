@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 # ************************** #
 #     Regis Philbot v1.0     #
@@ -70,7 +70,7 @@ def main():
 		bot.delay(random.randint(15,30))	
 		
 class Trivia():
-	askedQuestions = set()
+	askedQuestions = {}
 	currentQuestion = 0
 	questionSet = ''
 	timer = time.time()
@@ -89,7 +89,15 @@ class Trivia():
 		loadConfig()
 		loadQuestions()
 		self.load()
+		self.questions = config['questions']
 		self.questionSet = config["questionSet"]
+
+		if self.questions not in self.askedQuestions:
+			self.askedQuestions[self.questions] = {}
+
+		if self.questionSet not in self.askedQuestions[self.questions]:
+			self.askedQuestions[self.questions][self.questionSet] = set()
+
 		self.currentQuestion = random.randint(0, len(questions[self.questionSet]) - 1)
 		self.getNextQuestion()
 
@@ -99,14 +107,26 @@ class Trivia():
 				data = json.loads(f.read())
 				if 'scores' in data:
 					self.money = data['scores']
+				if 'asked' in data:
+					self.askedQuestions = data['asked']
+					for key,val in self.askedQuestions.iteritems():
+						for questionSet,questions in val.iteritems():
+							self.askedQuestions[key][questionSet] = set(val)
 			prettyPrint('loaded scores')
 		except IOError:
 			prettyPrint('no scores to load')
 			self.money = {}
 
 	def save(self):
+		# transform sets back to lists
+		savedQuestions = {}
+		for key,val in self.askedQuestions.iteritems():
+			savedQuestions[key] = {}
+			for questionSet,questions in val.iteritems():
+				savedQuestions[key][questionSet] = list(questions)
 		save = {
 			'scores': self.money,
+			'asked': savedQuestions,
 		}
 		save_data = json.dumps(save)
 		with open(_SAVE_FILENAME, 'w') as f:
@@ -128,7 +148,7 @@ class Trivia():
 		answerFound = False
 		self.hintGiven = False
 		
-		self.askedQuestions.add(self.currentQuestion)
+		self.askedQuestions[self.questions][self.questionSet].add(self.currentQuestion)
 		question = questions[self.questionSet][self.currentQuestion]["question"]
 		answer = questions[self.questionSet][self.currentQuestion]["answer"]
 
@@ -154,7 +174,7 @@ class Trivia():
 			return False
 
 	def getNextQuestion(self):
-		while self.currentQuestion in self.askedQuestions:
+		while self.currentQuestion in self.askedQuestions[self.questions][self.questionSet]:
 			self.currentQuestion = random.randint(0, len(questions[self.questionSet]) - 1)
 
 	def givePoints(self, userid, username):
