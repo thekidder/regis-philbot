@@ -96,7 +96,9 @@ class Trivia():
 	def load(self):
 		try:
 			with open(_SAVE_FILENAME, 'r') as f:
-				self.money = json.loads(f.read())
+				data = json.loads(f.read())
+				if 'scores' in data:
+					self.money = data['scores']
 			prettyPrint('loaded scores')
 		except IOError:
 			prettyPrint('no scores to load')
