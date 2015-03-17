@@ -20,6 +20,9 @@ import requests
 import BaseHTTPServer
 import json
 
+_PORT = 1337
+_SAVE_FILENAME = 'save.json'
+
 expectedRequestKeys = ['user_id','channel_name','timestamp','team_id','channel_id','token','text','service_id','team_domain','user_name']
 
 config = {}
@@ -76,7 +79,7 @@ class Trivia():
 	
 	def __init__(self):
 		global httpd
-		httpd = BaseHTTPServer.HTTPServer(('', 69), RequestHandler)
+		httpd = BaseHTTPServer.HTTPServer(('', _PORT), RequestHandler)
 		httpd.socket.settimeout(1)
 
 		random.seed()
@@ -92,7 +95,7 @@ class Trivia():
 
 	def load(self):
 		try:
-			with open('scores.json', 'r') as f:
+			with open(_SAVE_FILENAME, 'r') as f:
 				self.money = json.loads(f.read())
 			prettyPrint('loaded scores')
 		except IOError:
@@ -100,9 +103,12 @@ class Trivia():
 			self.money = {}
 
 	def save(self):
-		score = json.dumps(self.money)
-		with open('scores.json', 'w') as f:
-			f.write(score)
+		save = {
+			'scores': self.money,
+		}
+		save_data = json.dumps(save)
+		with open(_SAVE_FILENAME, 'w') as f:
+			f.write(save_data)
 	
 	def startTimer(self):
 			self.timer = time.time()
