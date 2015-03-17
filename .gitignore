@@ -1,3 +1,4 @@
 logs/*
 conf/bot.conf
 scores.json
+*.sublime-workspace
