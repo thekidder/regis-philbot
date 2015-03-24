@@ -152,7 +152,7 @@ class Trivia():
       if float(post["timestamp"][0]) < float(self.timer):
         return
 
-      if checkAnswer(post['text']):
+      if self.checkAnswer(post['text']):
         self.answerFound = True
         self.givePoints(post['user_id'][0], post['user_name'][0])
     
