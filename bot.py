@@ -236,7 +236,8 @@ class Trivia():
     
       
 class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
-  def __init__(self):
+  def __init__(self, request, client_address, server):
+    super(BaseHTTPServer.BaseHTTPRequestHandler, self).__init__(request, client_address, server)
     self.message_queue = []
 
   def log_message(self, format, *args):
