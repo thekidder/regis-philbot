@@ -3,7 +3,7 @@
 # ************************** #
 #     Regis Philbot v1.0     #
 #      Slack Trivia Bot      #
-#                         #
+#                            #
 #             by             #
 #      Patrick Hennessy      #
 #                            #
@@ -141,9 +141,10 @@ class Trivia():
   def listenForAnswers(self):
     self.httpd.handle_request()
     while len(self.httpd.message_queue):
-      answer = self.httpd.message_queue[0]
-      if checkAnswer(msg):
+      post = self.httpd.message_queue[0]
+      if checkAnswer(post['text']):
         self.answerFound = True
+        self.givePoints(post['user_id'][0], post['user_name'][0])
       self.httpd.message_queue = self.httpd.message_queue[1:]
     
   def checkAnswer(self, msg):
