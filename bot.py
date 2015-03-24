@@ -51,6 +51,8 @@ class Trivia():
   def __init__(self):
     self.httpd = BaseHTTPServer.HTTPServer(('', _PORT), RequestHandler)
     self.httpd.socket.settimeout(1)
+    self.httpd.message_queue = []
+
 
     random.seed()
 
@@ -228,7 +230,7 @@ class Trivia():
       self.askQuestion()
       
       while self.getElapsedTime() < 40:
-        self.httpd.handle_request()
+        self.listenForAnswers()
         
         if (self.answerFound):
           break
@@ -243,8 +245,6 @@ class Trivia():
     
       
 class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
-  message_queue = []
-
   def log_message(self, format, *args):
     return
 
@@ -267,7 +267,7 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     elif ( post["user_name"][0] == 'slackbot' ):
       return
 
-    self.message_queue.append(post)
+    self.server.message_queue.append(post)
     
 # Aux functions for output stuff
 class color():
