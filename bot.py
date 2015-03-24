@@ -157,8 +157,8 @@ class Trivia():
         self.givePoints(post['user_id'][0], post['user_name'][0])
     
   def checkAnswer(self, msg):
-    answer = questions[self.questionSet][self.currentQuestion]["answer"]
-    regexp = questions[self.questionSet][self.currentQuestion]["regexp"]
+    answer = self.questions[self.questionSet][self.currentQuestion]["answer"]
+    regexp = self.questions[self.questionSet][self.currentQuestion]["regexp"]
     first_hash = answer.find('#')
     last_hash = answer.rfind('#')
 
