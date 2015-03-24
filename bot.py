@@ -142,10 +142,14 @@ class Trivia():
     self.httpd.handle_request()
     while len(self.httpd.message_queue):
       post = self.httpd.message_queue[0]
+      self.httpd.message_queue = self.httpd.message_queue[1:]
+
+      if post["token"][0] != self.config['outgoingToken']:
+        continue
+
       if checkAnswer(post['text']):
         self.answerFound = True
         self.givePoints(post['user_id'][0], post['user_name'][0])
-      self.httpd.message_queue = self.httpd.message_queue[1:]
     
   def checkAnswer(self, msg):
     answer = questions[self.questionSet][self.currentQuestion]["answer"]
@@ -236,9 +240,7 @@ class Trivia():
     
       
 class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
-  def __init__(self, request, client_address, server):
-    super(BaseHTTPServer.BaseHTTPRequestHandler, self).__init__(request, client_address, server)
-    self.message_queue = []
+  message_queue = []
 
   def log_message(self, format, *args):
     return
@@ -259,8 +261,6 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     if not(set(expectedRequestKeys).issubset(post.keys())):
       return
     
-    if not( post["token"][0] == config['outgoingToken'] ):
-      return
     elif ( post["user_name"][0] == 'slackbot' ):
       return
 
