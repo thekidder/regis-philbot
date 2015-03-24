@@ -147,6 +147,9 @@ class Trivia():
       if post["token"][0] != self.config['outgoingToken']:
         continue
 
+      if float(post["timestamp"][0]) < float(self.timer):
+        return
+
       if checkAnswer(post['text']):
         self.answerFound = True
         self.givePoints(post['user_id'][0], post['user_name'][0])
@@ -262,9 +265,6 @@ class RequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
       return
     
     elif ( post["user_name"][0] == 'slackbot' ):
-      return
-
-    if( float(post["timestamp"][0]) < float(bot.timer) ):
       return
 
     self.message_queue.append(post)
