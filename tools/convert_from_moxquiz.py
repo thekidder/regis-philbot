@@ -42,7 +42,7 @@ def main():
         category = None
         regexp = None
   with open(output_filename, 'w') as output_file:
-    output_file.write(json.dumps(output, ensure_ascii=False, encoding='utf8'))
+    output_file.write(json.dumps(output, ensure_ascii=False, encoding='utf8', indent=2, separators=(',', ': ')))
 
 if __name__ == '__main__':
   main()
