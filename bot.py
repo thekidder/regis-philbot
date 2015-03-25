@@ -158,7 +158,9 @@ class Trivia():
     
   def checkAnswer(self, msg):
     answer = self.questions[self.questionSet][self.currentQuestion]["answer"]
-    regexp = self.questions[self.questionSet][self.currentQuestion]["regexp"]
+    regexp = None
+    if 'regexp' in self.questions[self.questionSet][self.currentQuestion]:
+      regexp = self.questions[self.questionSet][self.currentQuestion]["regexp"]
     first_hash = answer.find('#')
     last_hash = answer.rfind('#')
 
